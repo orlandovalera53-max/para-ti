@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para la negrita más hermosa · The Marías</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:#07040d;
+  color:#f4ecff;
+  font-family:'Jost',system-ui,sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- FONDO ---------- */
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+.glow{position:fixed;border-radius:50%;filter:blur(90px);z-index:1;pointer-events:none;opacity:.35;animation:float 20s ease-in-out infinite}
+.g1{width:460px;height:460px;background:#7b2ff7;top:-140px;left:-120px}
+.g2{width:420px;height:420px;background:#ff2e93;bottom:-160px;right:-100px;animation-delay:-7s}
+.g3{width:340px;height:340px;background:#00d4ff;top:45%;left:58%;opacity:.16;animation-delay:-13s}
+@keyframes float{50%{transform:translate3d(50px,-40px,0) scale(1.18)}}
+
+#hearts{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.heart{position:absolute;bottom:-50px;opacity:0;animation:rise linear infinite}
+@keyframes rise{
+  0%{transform:translateY(0) rotate(0deg);opacity:0}
+  12%{opacity:.85}
+  100%{transform:translateY(-115vh) rotate(380deg);opacity:0}
+}
+
+/* ---------- ESCENAS ---------- */
+.scene{
+  position:relative;z-index:2;min-height:100vh;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 20px;
+}
+.scene.active{display:flex;animation:fadeScene .9s ease both}
+@keyframes fadeScene{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+/* ---------- INTRO ---------- */
+/* Se eliminaron los estilos .kicker y .band porque ya no se usan */
+.vinyl-big{
+  width:clamp(118px,25vw,172px);aspect-ratio:1;border-radius:50%;
+  margin:0 auto 34px;position:relative; /* Cambiado margin-top a 0 para centrar mejor */
+  background:
+    radial-gradient(circle at 50% 50%, #07040d 0 3.5%, transparent 4%),
+    radial-gradient(circle at 50% 50%, #ff9ecd 0 15%, #ff6fb5 15% 17.5%, rgba(0,0,0,.6) 17.5% 19%, transparent 19.5%),
+    repeating-radial-gradient(circle at 50% 50%, #16112a 0 2px, #0a0714 2px 4.5px);
+  box-shadow:0 0 70px rgba(255,126,196,.35), inset 0 0 50px rgba(0,0,0,.85);
+  animation:spin 14s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sub{
+  text-align:center;font-weight:300;line-height:1.85;
+  color:#cfc2e8;font-size:clamp(.9rem,2.4vw,1.02rem);max-width:520px;margin-bottom:38px;
+}
+.sub em{color:#ffb8de;font-style:italic}
+
+.btn{
+  font-family:'Jost',sans-serif;font-size:.78rem;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;
+  padding:17px 40px;border-radius:100px;cursor:pointer;
+  color:#fff;border:1px solid rgba(255,255,255,.25);
+  background:linear-gradient(120deg,rgba(255,126,196,.2),rgba(140,110,255,.2));
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:.45s cubic-bezier(.2,.8,.3,1);
+}
+.btn:hover{
+  transform:translateY(-3px);
+  border-color:#ff9ecd;
+  box-shadow:0 16px 46px rgba(255,126,196,.4);
+  background:linear-gradient(120deg,rgba(255,126,196,.36),rgba(140,110,255,.36));
+}
+.btn:active{transform:translateY(-1px) scale(.98)}
+
+/* ---------- CAZA DE VINILOS ---------- */
+.hunt-title{
+  font-family:'Playfair Display',serif;font-weight:500;
+  font-size:clamp(1.6rem,5.5vw,2.6rem);text-align:center;line-height:1.2;
+}
+.hunt-title span{
+  background:linear-gradient(100deg,#ffb8de,#b892ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hunt-sub{
+  text-align:center;font-weight:300;color:#b9a9d6;margin-top:14px;
+  font-size:clamp(.82rem,2.3vw,.95rem);line-height:1.7;
+}
+.field{
+  position:relative;width:min(920px,94vw);
+  height:clamp(330px,52vh,450px);margin-top:16px;
+}
+.vinyl{
+  position:absolute;width:clamp(62px,10vw,94px);aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  background:none;border:none;padding:0;cursor:pointer;
+}
+.bob{display:block;width:100%;height:100%;animation:bob 6.5s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+.disc{
+  display:block;width:100%;height:100%;border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 50%, #07040d 0 4%, transparent 4.5%),
+    radial-gradient(circle at 50% 50%, var(--c,#ff9ecd) 0 14%, rgba(0,0,0,.55) 14.5% 16.5%, transparent 17%),
+    repeating-radial-gradient(circle at 50% 50%, #191330 0 2px, #0a0714 2px 4.5px);
+  box-shadow:0 0 26px -4px var(--c,#ff9ecd), inset 0 0 26px rgba(0,0,0,.8);
+  transition:transform .55s cubic-bezier(.2,.8,.3,1.5), box-shadow .5s;
+}
+.vinyl:hover .disc{
+  transform:scale(1.13) rotate(28deg);
+  box-shadow:0 0 48px 2px var(--c,#ff9ecd), inset 0 0 26px rgba(0,0,0,.8);
+}
+.vinyl.found .disc{
+  box-shadow:0 0 0 1.5px rgba(255,255,255,.55), 0 0 54px 4px var(--c,#ff9ecd);
+}
+.vinyl.found::after{
+  content:'✓';position:absolute;top:-7px;right:-7px;
+  width:25px;height:25px;border-radius:50%;
+  background:var(--c,#ff9ecd);color:#0a0612;
+  font-size:13px;font-weight:700;display:grid;place-items:center;
+  animation:pop .45s cubic-bezier(.2,.9,.3,1.6) both;
+}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.vinyl.found .bob{animation-play-state:paused}
+
+.dots{display:flex;gap:11px;margin-top:6px}
+.dot{
+  width:9px;height:9px;border-radius:50%;
+  background:rgba(255,255,255,.16);transition:.45s;
+}
+.dot.on{background:#ff9ecd;box-shadow:0 0 16px #ff9ecd;transform:scale(1.35)}
+
+/* ---------- SOBRE ---------- */
+.unlock-wrap{
+  display:none;flex-direction:column;align-items:center;gap:20px;margin-top:34px;
+}
+.unlock-wrap.show{display:flex;animation:pop .8s cubic-bezier(.2,.9,.3,1.4) both}
+.envelope{
+  width:min(215px,58vw);height:min(146px,40vw);
+  border:none;border-radius:12px;cursor:pointer;position:relative;
+  background:linear-gradient(160deg,#ffd0e8,#ff8ccb 55%,#f06bb0);
+  box-shadow:0 22px 64px rgba(255,110,185,.45), inset 0 -6px 20px rgba(160,40,110,.35);
+  transition:.5s cubic-bezier(.2,.8,.3,1);
+  animation:pulseGlow 2.8s ease-in-out infinite;
+}
+@keyframes pulseGlow{
+  0%,100%{filter:drop-shadow(0 0 12px rgba(255,140,203,.45))}
+  50%{filter:drop-shadow(0 0 34px rgba(255,140,203,.9))}
+}
+.envelope::before{
+  content:'';position:absolute;inset:0;border-radius:12px;
+  clip-path:polygon(0 0,100% 0,50% 58%);
+  background:linear-gradient(160deg,#ffe2f1,#ffa8d6);
+}
+.envelope::after{
+  content:'♥';position:absolute;left:50%;top:57%;transform:translate(-50%,-50%);
+  font-size:24px;color:#fff;text-shadow:0 2px 12px rgba(150,20,90,.5);
+}
+.envelope:hover{transform:translateY(-8px) scale(1.04)}
+.unlock-text{
+  font-family:'Playfair Display',serif;font-style:italic;
+  color:#ffc4e3;font-size:clamp(1rem,3vw,1.25rem);letter-spacing:.02em;
+}
+
+/* ---------- MODAL ---------- */
+.modal{
+  position:fixed;inset:0;z-index:60;display:none;
+  align-items:center;justify-content:center;padding:22px;
+  background:rgba(6,3,12,.78);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.modal.open{display:flex;animation:fadeScene .35s ease both}
+.card{
+  width:min(470px,93vw);border-radius:26px;padding:38px 32px 32px;
+  text-align:center;position:relative;
+  background:linear-gradient(165deg,rgba(255,255,255,.1),rgba(255,255,255,.028));
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 40px 100px rgba(0,0,0,.72);
+  animation:cardIn .6s cubic-bezier(.2,.9,.3,1.3) both;
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(30px) scale(.93)}to{opacity:1;transform:none}}
+.mini-disc{
+  width:74px;height:74px;border-radius:50%;margin:0 auto 20px;
+  background:
+    radial-gradient(circle at 50% 50%, #07040d 0 4%, transparent 4.5%),
+    radial-gradient(circle at 50% 50%, var(--c) 0 14%, rgba(0,0,0,.55) 14.5% 16.5%, transparent 17%),
+    repeating-radial-gradient(circle at 50% 50%, #191330 0 2px, #0a0714 2px 4.5px);
+  box-shadow:0 0 34px -4px var(--c);
+  animation:spin 9s linear infinite;
+}
+.card-tag{
+  font-size:.63rem;letter-spacing:.4em;text-transform:uppercase;
+  color:#c3a4ff;opacity:.9;margin-bottom:10px;
+}
+.card h3{
+  font-family:'Playfair Display',serif;font-weight:500;font-style:italic;
+  font-size:clamp(1.6rem,5.5vw,2.1rem);line-height:1.15;margin-bottom:6px;
+}
+.card-album{font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;color:#8ee7ff;opacity:.85;margin-bottom:20px}
+.card-text{
+  font-weight:300;color:#d4c8ee;line-height:1.85;
+  font-size:clamp(.86rem,2.5vw,.96rem);margin-bottom:26px;
+}
+.btn.small{padding:12px 30px;font-size:.7rem}
+
+/* ---------- CARTA ---------- */
+#letterScene{justify-content:flex-start;padding-top:clamp(50px,9vh,90px);padding-bottom:90px}
+.paper{
+  position:relative;width:min(690px,93vw);
+  background:linear-gradient(178deg,#fffaf5 0%,#fdf3ea 45%,#f8e9dd 100%);
+  border-radius:20px;padding:clamp(38px,7vw,66px) clamp(26px,6vw,58px) clamp(42px,7vw,64px);
+  color:#2c1b30;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(.97rem,2.5vw,1.09rem);
+  line-height:1.95;
+  box-shadow:
+    0 46px 130px rgba(0,0,0,.68),
+    0 0 0 1px rgba(255,255,255,.55) inset,
+    0 0 90px rgba(255,160,210,.12);
+  animation:unfold 1.3s cubic-bezier(.2,.8,.3,1) both;
+}
+@keyframes unfold{
+  from{opacity:0;transform:translateY(46px) scale(.95) rotateX(9deg)}
+  to{opacity:1;transform:none}
+}
+.paper::before{
+  content:'';position:absolute;inset:14px;border-radius:12px;
+  border:1px solid rgba(196,140,160,.28);pointer-events:none;
+}
+.paper::after{
+  content:'';position:absolute;inset:0;border-radius:20px;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(180,140,150,.045) 0 1px,transparent 1px 30px);
+}
+.seal{
+  position:absolute;top:-26px;left:50%;transform:translateX(-50%);
+  width:54px;height:54px;border-radius:50%;
+  display:grid;place-items:center;
+  background:radial-gradient(circle at 34% 30%,#ff9ecd,#e0488f 70%,#a92a68);
+  color:#fff;font-size:20px;
+  box-shadow:0 10px 30px rgba(200,50,120,.5), inset 0 -3px 8px rgba(0,0,0,.28);
+  animation:sealPulse 3.4s ease-in-out infinite;
+}
+@keyframes sealPulse{
+  0%,100%{box-shadow:0 10px 30px rgba(200,50,120,.45), inset 0 -3px 8px rgba(0,0,0,.28)}
+  50%{box-shadow:0 10px 46px rgba(255,120,190,.9), inset 0 -3px 8px rgba(0,0,0,.28)}
+}
+.paper p{
+  opacity:0;transform:translateY(18px);
+  transition:opacity 1.05s ease, transform 1.05s cubic-bezier(.2,.8,.3,1);
+  margin-bottom:22px;
+  position:relative;z-index:1;
+}
+.paper p.show{opacity:1;transform:none}
+.saludo{
+  font-family:'Dancing Script',cursive;font-weight:600;
+  font-size:clamp(1.35rem,4.4vw,1.75rem);
+  color:#a92a68;line-height:1.5;margin-bottom:28px !important;
+}
+.teamo{
+  font-family:'Dancing Script',cursive;font-weight:600;
+  font-size:clamp(1.6rem,5.2vw,2.1rem);
+  color:#c0246f;text-align:right;margin-top:8px !important;
+}
+.final{font-style:italic;color:#4a2c53}
+.letter-hint{
+  margin-top:34px;text-align:center;color:#9c8ec0;
+  font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;
+  animation:blink 2.6s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:.35}50%{opacity:.95}}
+
+/* ---------- AUDIO ---------- */
+#audioBtn{
+  position:fixed;top:20px;right:20px;z-index:80;
+  width:46px;height:46px;border-radius:50%;cursor:pointer;
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(20,10,32,.55);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  color:#c3a4ff;font-size:17px;display:grid;place-items:center;
+  transition:.4s;
+}
+#audioBtn:hover{border-color:#ff9ecd;color:#ff9ecd;transform:scale(1.08)}
+#audioBtn.on{color:#ff9ecd;border-color:#ff9ecd;box-shadow:0 0 24px rgba(255,126,196,.5)}
+#audioBtn.on::after{
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  border:1px solid rgba(255,126,196,.5);
+  animation:ring 1.8s ease-out infinite;
+}
+@keyframes ring{0%{transform:scale(.9);opacity:.9}100%{transform:scale(1.5);opacity:0}}
+
+@media (max-width:480px){
+  .field{height:60vh}
+  .vinyl{width:clamp(58px,17vw,74px)}
+}
+</style>
+</head>
+<body>
+
+<canvas id="sky"></canvas>
+<div class="glow g1"></div>
+<div class="glow g2"></div>
+<div class="glow g3"></div>
+<div id="hearts"></div>
+
+<!-- Reproductor de YouTube oculto -->
+<div id="youtube-audio" style="position:absolute; top:-9999px; left:-9999px; width:1px; height:1px;"></div>
+
+<button id="audioBtn" aria-label="Música ambiental">♪</button>
+
+<!-- ================= INTRO ================= -->
+<section id="intro" class="scene active">
+  <!-- Se eliminó el texto de "Los Ángeles · Dream Pop Bilingüe" y "The Marías" -->
+  <div class="vinyl-big"></div>
+  <p class="sub">
+    Hay canciones que uno escucha… y hay canciones que le recuerdan a alguien.<br>
+    <em>Estas cinco me recuerdan a ti.</em>
+  </p>
+  <button class="btn" id="startBtn">Comenzar &nbsp;→</button>
+</section>
+
+<!-- ================= CAZA ================= -->
+<section id="hunt" class="scene">
+  <h2 class="hunt-title">Encuentra los <span>5 vinilos</span></h2>
+  <p class="hunt-sub">Cada uno guarda una canción de The Marías.<br>Y cada canción guarda algo que llevo dentro desde que te fallé.</p>
+  <div class="field" id="field"></div>
+  <div class="dots" id="dots"></div>
+
+  <div class="unlock-wrap" id="unlockWrap">
+    <button class="envelope" id="envelopeBtn" aria-label="Abrir la carta"></button>
+    <p class="unlock-text">Hay una carta para ti…</p>
+  </div>
+</section>
+
+<!-- ================= CARTA ================= -->
+<section id="letterScene" class="scene">
+  <div class="paper" id="paper">
+    <div class="seal">♥</div>
+    <p class="saludo">Para la negrita más hermosa que mis ojos han visto jamás:</p>
+    <p>No sé a dónde nos llevará el camino ni cuánto tiempo nos presté la vida, pero lo que sí sé con todo el corazón es que el verdadero amor no se busca, simplemente se encuentra y se cuida con el alma.</p>
+    <p>Me gustaría volver a ese tiempo cuando éramos un par de desconocidos queriéndonos conocer, aunque hoy en día mi vida entera se resume en ti. Mis ojos solamente logran verte a ti, porque eres tú quien me hace increíblemente feliz.</p>
+    <p>Te pienso incluso cuando intento no hacerlo, y es que tu ausencia o tu cercanía me recuerdan que fuiste y eres esa parte de mí que ni el tiempo ni el adiós pudieron borrar. Por eso, estoy dispuesto a todo cuando se trata de ti: a salir de mi zona de confort, a hacer sacrificios y a ignorar mi propio cansancio solo para cuidarte si alguna vez lo necesitaras.</p>
+    <p>Para tu incertidumbre tengo estos brazos, para tu desconfianza tengo sinceridad, para tus noches tengo estas manos, para ti tengo todo... y si algo falta, descuida, lo consigo.</p>
+    <p>Le pido a Dios cada día que te proteja, que te de paz, salud y una vida llena de felicidad, porque si Él me concediera un solo deseo para esta vida, te juro que sería compartirla toda a tu lado.</p>
+    <p class="final">Seamos ese amor bonito que tanto esperábamos los dos.</p>
+    <p class="teamo">Te amo.</p>
+  </div>
+  <p class="letter-hint">♫ &nbsp;Fin del viaje&nbsp; ♫</p>
+</section>
+
+<!-- ================= MODAL ================= -->
+<div class="modal" id="modal">
+  <div class="card" id="card"></div>
+</div>
+
+<script>
+/* ============================================================
+   DATOS · canciones de The Marías
+============================================================ */
+const songs = [
+  {
+    title:'No One Noticed', year:'2024', album:'Submarine (Extended Spanish)', color:'#ff9ecd',
+    remember:'Tú eres la razón por la cual esta canción me rompe. Porque yo fui el que no notó lo que tenía enfrente hasta que te vio irse. "No one noticed" suena a mí, a mi ceguera, a los días en que tú me dabas todo y yo miraba hacia otro lado. Hoy la escucho y solo pienso en lo mucho que te extraño, y en cuánto daría por volver a ser visto por ti.'
+  },
+  {
+    title:'Cariño', year:'2017', album:'Superclean Vol. I', color:'#b892ff',
+    remember:'Tú eres la razón por la cual "cariño" se me queda atascado en la garganta. Un bolero suave para la mujer que amé bonito… y a la que también lastimé. Cada vez que la escucho siento tu nombre en la boca y las ganas de decirte que estoy cambiando, que esta vez quiero quererte como se debe.'
+  },
+  {
+    title:'Hush', year:'2017', album:'Superclean Vol. I', color:'#8ee7ff',
+    remember:'Tú eres la razón por la cual esta canción me duele. Habla del silencio. Y el silencio fue lo que me sobró cuando debí hablarte, cuando debí pedirte perdón, cuando debí quedarme. Hoy ya no quiero callar: quiero decirte todo lo que siento, aunque me tiemble la voz, aunque me cueste, aunque tal vez ya no quieras escucharme.'
+  },
+  {
+    title:'Un Millón', year:'2021', album:'CINEMA', color:'#ffd166',
+    remember:'Tú eres la razón por la cual esta canción me representa. Te quise un millón de veces… y te fallé un millón de veces más. Pero también estoy dispuesto a quererte un millón de veces mejor, con paciencia, con hechos, no solo con palabras. Si existe una forma de recuperar tu confianza, quiero intentarlo un millón de veces.'
+  },
+  {
+    title:'Heavy', year:'2021', album:'CINEMA', color:'#7cffb2',
+    remember:'Tú eres la razón por la cual esta canción me pesa. Habla del peso que uno carga, y ese peso es mío: mis errores, mis silencios, mis noches pensando en cómo te lastimé. Pero también me recuerdas que fuiste la única persona capaz de hacerme sentir ligero. Extraño eso. Extraño tu paz. Y haría cualquier cosa por volver a merecerte.'
+  }
+];
+
+/* Posiciones de los vinilos en el campo */
+const positions = [
+  {l:16, t:26}, {l:80, t:20}, {l:27, t:72}, {l:79, t:68}, {l:52, t:44}
+];
+
+/* ============================================================
+   FONDO ESTRELLADO
+============================================================ */
+const canvas = document.getElementById('sky');
+const ctx = canvas.getContext('2d');
+let stars = [], W, H;
+
+function resizeSky(){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  W = canvas.width  = window.innerWidth  * dpr;
+  H = canvas.height = window.innerHeight * dpr;
+  canvas.style.width  = window.innerWidth  + 'px';
+  canvas.style.height = window.innerHeight + 'px';
+  stars = [];
+  const count = Math.floor((window.innerWidth * window.innerHeight) / 8500);
+  const palette = ['255,180,220','190,160,255','255,255,255','150,225,255'];
+  for (let i = 0; i < count; i++){
+    stars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: (Math.random() * 1.3 + 0.3) * dpr,
+      a: Math.random() * Math.PI * 2,
+      s: Math.random() * 0.018 + 0.003,
+      c: palette[Math.floor(Math.random() * palette.length)]
+    });
+  }
+}
+
+function drawSky(){
+  ctx.clearRect(0, 0, W, H);
+  for (const st of stars){
+    st.a += st.s;
+    const alpha = 0.28 + Math.abs(Math.sin(st.a)) * 0.7;
+    ctx.beginPath();
+    ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${st.c},${alpha})`;
+    ctx.fill();
+  }
+  requestAnimationFrame(drawSky);
+}
+resizeSky();
+drawSky();
+window.addEventListener('resize', resizeSky);
+
+/* ============================================================
+   YOUTUBE · "No One Noticed (Extended Spanish)" suena al primer toque
+============================================================ */
+let ytPlayer = null;
+let audioStarted = false;
+
+function loadYouTubeAPI() {
+  return new Promise((resolve) => {
+    if (window.YT && window.YT.Player) {
+      resolve(window.YT);
+      return;
+    }
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    window.onYouTubeIframeAPIReady = () => {
+      resolve(window.YT);
+    };
+  });
+}
+
+async function startYouTubeAudio() {
+  if (audioStarted) return;
+  audioStarted = true;
+
+  const YT = await loadYouTubeAPI();
+  ytPlayer = new YT.Player('youtube-audio', {
+    height: '1',
+    width: '1',
+    videoId: 'IP89SayAZG0',
+    playerVars: {
+      autoplay: 1,
+      controls: 0,
+      disablekb: 1,
+      fs: 0,
+      modestbranding: 1,
+      rel: 0,
+      showinfo: 0,
+      loop: 1,
+      playlist: 'IP89SayAZG0'
+    },
+    events: {
+      onReady: (event) => {
+        event.target.setVolume(45);
+        event.target.playVideo();
+      }
+    }
+  });
+}
+
+/* ============================================================
+   AUDIO AMBIENTAL · respaldo Web Audio API
+============================================================ */
+let audioCtx = null, masterGain = null, audioOn = false;
+const audioBtn = document.getElementById('audioBtn');
+const chords = [
+  [174.61, 220.00, 261.63, 329.63],
+  [220.00, 261.63, 329.63, 392.00],
+  [146.83, 174.61, 220.00, 261.63],
+  [196.00, 246.94, 293.66, 349.23]
+];
+
+function buildAudio(){
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = 0;
+  masterGain.connect(audioCtx.destination);
+
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 1150;
+  filter.Q.value = 0.7;
+  filter.connect(masterGain);
+
+  const oscs = chords[0].map((f, i) => {
+    const osc = audioCtx.createOscillator();
+    osc.type = (i % 2 === 0) ? 'triangle' : 'sine';
+    osc.frequency.value = f;
+    osc.detune.value = (i - 1.5) * 5;
+    const g = audioCtx.createGain();
+    g.gain.value = 0.17;
+    osc.connect(g);
+    g.connect(filter);
+    osc.start();
+    return osc;
+  });
+
+  let idx = 0;
+  setInterval(() => {
+    if (!audioCtx) return;
+    idx = (idx + 1) % chords.length;
+    oscs.forEach((osc, i) => {
+      osc.frequency.linearRampToValueAtTime(chords[idx][i], audioCtx.currentTime + 4.5);
+    });
+  }, 8200);
+
+  const lfo = audioCtx.createOscillator();
+  lfo.frequency.value = 0.07;
+  const lfoGain = audioCtx.createGain();
+  lfoGain.gain.value = 0.025;
+  lfo.connect(lfoGain);
+  lfoGain.connect(masterGain.gain);
+  lfo.start();
+}
+
+async function toggleAudio(forceOn){
+  if (!audioCtx) buildAudio();
+  if (audioCtx.state === 'suspended') await audioCtx.resume();
+
+  audioOn = (typeof forceOn === 'boolean') ? forceOn : !audioOn;
+  masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+  masterGain.gain.setTargetAtTime(audioOn ? 0.085 : 0, audioCtx.currentTime, 0.9);
+  audioBtn.classList.toggle('on', audioOn);
+  audioBtn.textContent = audioOn ? '♫' : '♪';
+}
+
+audioBtn.addEventListener('click', () => toggleAudio());
+
+/* ============================================================
+   NAVEGACIÓN ENTRE ESCENAS
+============================================================ */
+function showScene(id){
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============================================================
+   CAMPO DE VINILOS
+============================================================ */
+const field = document.getElementById('field');
+const dotsWrap = document.getElementById('dots');
+const unlockWrap = document.getElementById('unlockWrap');
+const modal = document.getElementById('modal');
+const card = document.getElementById('card');
+const found = new Set();
+
+songs.forEach((song, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'vinyl';
+  btn.style.left = positions[i].l + '%';
+  btn.style.top  = positions[i].t + '%';
+  btn.style.setProperty('--c', song.color);
+  btn.setAttribute('aria-label', 'Vinilo ' + (i + 1));
+  btn.innerHTML = `<span class="bob"><span class="disc"></span></span>`;
+  btn.addEventListener('click', () => {
+    if (!found.has(i)){
+      found.add(i);
+      btn.classList.add('found');
+      updateProgress();
+    }
+    openCard(i);
+  });
+  field.appendChild(btn);
+
+  const dot = document.createElement('span');
+  dot.className = 'dot';
+  dotsWrap.appendChild(dot);
+});
+
+function updateProgress(){
+  const dots = dotsWrap.querySelectorAll('.dot');
+  dots.forEach((d, i) => d.classList.toggle('on', found.has(i)));
+  if (found.size === songs.length){
+    setTimeout(() => {
+      unlockWrap.classList.add('show');
+      unlockWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 600);
+  }
+}
+
+/* ============================================================
+   MODAL DE CANCIÓN · habla directamente a ella
+============================================================ */
+function openCard(i){
+  const s = songs[i];
+  card.innerHTML = `
+    <div class="mini-disc" style="--c:${s.color}"></div>
+    <p class="card-tag">The Marías · ${s.year}</p>
+    <h3>${s.title}</h3>
+    <p class="card-album">${s.album}</p>
+    <p class="card-text">${s.remember}</p>
+    <button class="btn small" id="closeCard">Cerrar</button>
+  `;
+  modal.classList.add('open');
+  document.getElementById('closeCard').addEventListener('click', closeCard);
+}
+
+function closeCard(){ modal.classList.remove('open'); }
+modal.addEventListener('click', e => { if (e.target === modal) closeCard(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCard(); });
+
+/* ============================================================
+   FLUJO PRINCIPAL
+============================================================ */
+document.getElementById('startBtn').addEventListener('click', () => {
+  startYouTubeAudio();
+  showScene('hunt');
+});
+
+document.getElementById('envelopeBtn').addEventListener('click', () => {
+  showScene('letterScene');
+  spawnHearts();
+  revealLetter();
+});
+
+/* ============================================================
+   CORAZONES FLOTANTES
+============================================================ */
+function spawnHearts(){
+  const layer = document.getElementById('hearts');
+  layer.innerHTML = '';
+  const colors = ['#ff9ecd','#b892ff','#8ee7ff','#ffd166','#ff7fc4'];
+  for (let i = 0; i < 16; i++){
+    const h = document.createElement('span');
+    h.className = 'heart';
+    h.textContent = Math.random() < 0.72 ? '♥' : '✿';
+    h.style.left = (Math.random() * 100) + '%';
+    h.style.animationDuration = (9 + Math.random() * 11) + 's';
+    h.style.animationDelay = (-Math.random() * 14) + 's';
+    h.style.fontSize = (10 + Math.random() * 20) + 'px';
+    h.style.color = colors[Math.floor(Math.random() * colors.length)];
+    layer.appendChild(h);
+  }
+}
+
+/* ============================================================
+   REVELADO DE LA CARTA
+============================================================ */
+function revealLetter(){
+  const paragraphs = document.querySelectorAll('#paper p');
+  paragraphs.forEach(p => p.classList.remove('show'));
+  paragraphs.forEach((p, i) => {
+    setTimeout(() => p.classList.add('show'), 700 + i * 620);
+  });
+}
+</script>
+</body>
+</html>
